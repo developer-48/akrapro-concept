@@ -14501,7 +14501,7 @@ async function hu(t, n = {}) {
 	}, { threshold: .01 }), ae = new ResizeObserver(() => {
 		let e = t.getBoundingClientRect();
 		if (!e.width || !e.height || !a) return;
-		a.setSize(e.width, e.height, !1), a.setPixelRatio(Math.min(devicePixelRatio, n.record ? 1 : innerWidth < 700 ? 1.25 : 1.5)), g.aspect = e.width / e.height;
+		a.setSize(e.width, e.height, !1), a.setPixelRatio(n.record ? n.recordPixelRatio || 1 : Math.min(devicePixelRatio, innerWidth < 700 ? 1.25 : 1.5)), g.aspect = e.width / e.height;
 		let r = n.compactFrame ?? innerWidth <= 1e3, i = r ? 800 / 660 : 16 / 9;
 		g.fov = te.radToDeg(2 * Math.atan(Math.tan(te.degToRad(16)) * Math.max(1, i / g.aspect))), g.updateProjectionMatrix(), b = r ? 9.8 / (800 / 660) : 6.7, F();
 	}), oe = (e) => {
@@ -14555,7 +14555,7 @@ async function hu(t, n = {}) {
 		t.dataset.quality = B ? "compact" : "full";
 		let V = pe?.bytes ?? n.modelBytes;
 		if (!V) {
-			let e = mu(B ? "models/mustang-mobile.glb" : "models/mustang.glb"), t = "DecompressionStream" in window, n = await fetch((t ? e + ".gz" : e) + "?v=detail8");
+			let e = mu(B ? "models/mustang-mobile.glb" : "models/mustang.glb"), t = "DecompressionStream" in window, n = await fetch((t ? e + ".gz" : e) + "?v=detail11");
 			if (!n.ok) throw Error("model-network");
 			let r = await n.arrayBuffer(), i = new Uint8Array(r, 0, Math.min(2, r.byteLength));
 			V = t && i[0] === 31 && i[1] === 139 ? await new Response(new Blob([r]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer() : r;
