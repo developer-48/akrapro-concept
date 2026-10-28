@@ -1,4 +1,5 @@
 const asset=path=>new URL(path,import.meta.url).href;
+import {fitCalipers} from './mustang-calipers.js?v=calipers13';
 import {addHingeMechanisms} from './mustang-hinges.js?v=detail8';
 import {doorPose,introPose,INTRO_DURATION} from './mustang-motion.js?v=detail8';
 import * as THREE from './three/three.module.min.js';
@@ -34,7 +35,7 @@ export async function mountMustang(host,options={}){
  const compact=supplied?.compact??options.compactModel??(matchMedia('(max-width:700px)').matches||navigator.connection?.saveData);host.dataset.quality=compact?'compact':'full';
  let bytes=supplied?.bytes??options.modelBytes;
  if(!bytes){const path=asset(compact?'models/mustang-mobile.glb':'models/mustang.glb'),compressed='DecompressionStream'in window;const response=await fetch((compressed?path+'.gz':path)+'?v=detail11');if(!response.ok)throw new Error('model-network');const payload=await response.arrayBuffer(),signature=new Uint8Array(payload,0,Math.min(2,payload.byteLength));bytes=compressed&&signature[0]===31&&signature[1]===139?await new Response(new Blob([payload]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer():payload;}
- const model=await loader.parseAsync(bytes,asset('models/'));if(disposed)return;model.scene.updateMatrixWorld(true);
+ const model=await loader.parseAsync(bytes,asset('models/'));if(disposed)return;model.scene.updateMatrixWorld(true);fitCalipers(model.scene);
  const textureLoader=new THREE.TextureLoader();
  const [sill,jamb,decal,emblem,wheelEmblem,horseTexture]=await Promise.all(['images/shelby-stripe.svg','images/jamb-monogram.svg','images/akra-lettering.svg','images/emblem-cyan.svg?v=detail8','images/wheel-emblem.svg?v=detail8','images/mustang-horse.svg?v=detail8'].map(path=>textureLoader.loadAsync(asset(path))));
  textures.push(sill,jamb,decal,emblem,wheelEmblem,horseTexture);
