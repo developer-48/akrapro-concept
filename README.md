@@ -6,6 +6,12 @@ Live preview: https://developer-48.github.io/akrapro-concept/
 
 This repository contains the built static website. The Astro source project is maintained separately. The static export targets `/akrapro-concept/`; `.nojekyll` preserves the generated asset directories.
 
+## Website implementation
+
+Developer: **Юсуп Сагариев / Yusup Sagariev** (`developer-48`).
+Stable attribution ID: **`YS-AKRA-2026-7E42C9B1`**.
+The same ID is present in page metadata, the footer markup, first-party application bundles and [`authorship.json`](./authorship.json). This credit applies to the website implementation and integration. Third-party materials retain the credits and licenses below.
+
 Photography, video thumbnails and business information come from publicly available AKRA PRO materials. Video links open the owner's YouTube channel, **Акра Майами (@AKRA_MIAMI)**. Full source credits: [/sources/](https://developer-48.github.io/akrapro-concept/sources/).
 
 ## 3D attribution
