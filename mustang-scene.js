@@ -1,6 +1,7 @@
 const asset=path=>new URL(path,import.meta.url).href;
 import {bindHoldRotation} from './mustang-rotation.js';
 import {createViewReturn} from './mustang-view.js';
+import {mustangPixelRatio} from './mustang-resolution.js';
 import {fitCalipers} from './mustang-calipers.js?v=calipers13';
 import {addHingeMechanisms} from './mustang-hinges.js?v=detail8';
 import {doorPose,introPose,INTRO_DURATION} from './mustang-motion.js?v=detail8';
@@ -20,7 +21,7 @@ export async function mountMustang(host,options={}){
  const cleanup=()=>{viewReturn=null;holdRotation?.stop();disposed=true;lifetime.abort();cancelAnimationFrame(frame);observer.disconnect();resize.disconnect();document.removeEventListener('visibilitychange',visibility);window.removeEventListener('pagehide',pagehide);renderer?.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose()}});environment?.dispose();textures.forEach(t=>t.dispose());decoder.dispose();};
  let environment;const textures=[];const decoder=new DRACOLoader().setDecoderPath(asset('three/draco/')).setWorkerLimit(1);decoder.preload();decoder.decoderPending?.catch(()=>{});
  const observer=new IntersectionObserver(([e])=>{visible=e.isIntersecting;if(visible)requestDraw();else {viewReturn=null;holdRotation?.stop();cancelAnimationFrame(frame);frame=0}},{threshold:.01});
- const resize=new ResizeObserver(()=>{const r=host.getBoundingClientRect();if(!r.width||!r.height||!renderer)return;renderer.setSize(r.width,r.height,false);renderer.setPixelRatio(options.record?(options.recordPixelRatio||1):Math.min(devicePixelRatio,innerWidth<700?1.25:1.5));camera.aspect=r.width/r.height;const compactPoster=options.compactFrame??(innerWidth<=1000),posterAspect=compactPoster?800/660:16/9;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(16))*Math.max(1,posterAspect/camera.aspect)));camera.updateProjectionMatrix();distance=compactPoster?9.8/(800/660):6.7;requestDraw()});
+ const resize=new ResizeObserver(()=>{const r=host.getBoundingClientRect();if(!r.width||!r.height||!renderer)return;const ratio=options.record?(options.recordPixelRatio||1):mustangPixelRatio({width:r.width,height:r.height,dpr:devicePixelRatio,touch:innerWidth<700||matchMedia('(pointer:coarse)').matches});renderer.setDrawingBufferSize(r.width,r.height,ratio);host.dataset.pixelRatio=String(ratio);camera.aspect=r.width/r.height;const compactPoster=options.compactFrame??(innerWidth<=1000),posterAspect=compactPoster?800/660:16/9;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(16))*Math.max(1,posterAspect/camera.aspect)));camera.updateProjectionMatrix();distance=compactPoster?9.8/(800/660):6.7;requestDraw()});
  const pagehide=e=>{viewReturn=null;holdRotation?.stop();if(!e.persisted)cleanup()};
  const visibility=()=>{if(!document.hidden)requestDraw();else{viewReturn=null;holdRotation?.stop();cancelAnimationFrame(frame);frame=0}};
  try{
