@@ -14650,7 +14650,7 @@ async function yu(i, a = {}) {
 		i.dataset.quality = G ? "compact" : "full";
 		let he = W?.bytes ?? a.modelBytes;
 		if (!he) {
-			let e = vu(G ? "models/mustang-mobile.glb" : "models/mustang.glb"), t = "DecompressionStream" in window, n = await fetch((t ? e + ".gz" : e) + "?v=detail11");
+			let e = vu(G ? "models/mustang-mobile.glb" : "models/mustang.glb"), t = "DecompressionStream" in window, n = await fetch((t ? e + ".gz" : e) + "?v=provenance17");
 			if (!n.ok) throw Error("model-network");
 			let r = await n.arrayBuffer(), i = new Uint8Array(r, 0, Math.min(2, r.byteLength));
 			he = t && i[0] === 31 && i[1] === 139 ? await new Response(new Blob([r]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer() : r;
